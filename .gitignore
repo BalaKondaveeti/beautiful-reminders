@@ -1,0 +1,8 @@
+node_modules
+dist
+*.local
+.DS_Store
+# Personal seed data: never commit (the repo is public)
+supabase/seed.sql
+# Local test output
+shots
