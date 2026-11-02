@@ -28,7 +28,7 @@ Every push to `main` builds and deploys to GitHub Pages (`.github/workflows/depl
 
 ## Database
 
-Supabase tables are prefixed `br_`. The schema is in [`supabase/schema.sql`](supabase/schema.sql): idempotent, run it in the Supabase SQL Editor. Row-level security limits every row to its owner. The app only uses the publishable key.
+Supabase tables are prefixed `br_`, with row-level security limiting every row to its owner. SQL is kept out of this repo and run by hand in the Supabase SQL Editor. The app only uses the publishable key.
 
 ## Design
 

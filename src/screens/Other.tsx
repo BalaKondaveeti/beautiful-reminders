@@ -6,7 +6,6 @@ import { DASHBOARD_URL, SQL_EDITOR_URL, SUPABASE_URL, supabase } from '../supaba
 import type { Goal } from '../types'
 import { IconBack, IconOut, IconRestore, IconTrash } from '../components/icons'
 import { Badge, ConfirmSheet, TopBar } from '../components/ui'
-import schemaSql from '../../supabase/schema.sql?raw'
 
 /* ---------- Archived ---------- */
 
@@ -163,36 +162,22 @@ export function Settings() {
 /* ---------- Schema not set up yet ---------- */
 
 export function SchemaMissing() {
-  const [copied, setCopied] = useState(false)
   return (
     <div className="page">
       <div className="setup">
         <h1 className="home-title">One-time setup</h1>
         <p>
           The app's tables (<code>br_goals</code> and <code>br_checkins</code>) aren't in Supabase yet. Paste the schema SQL into the SQL Editor and run it,
-          then come back and tap Try again. It only creates <code>br_</code> tables and is safe to run more than once.
+          then come back and tap Try again.
         </p>
         <div className="setup-actions">
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => {
-              void navigator.clipboard?.writeText(schemaSql).then(() => setCopied(true))
-            }}
-          >
-            {copied ? 'Copied ✓' : 'Copy schema SQL'}
-          </button>
-          <a className="btn" href={SQL_EDITOR_URL} target="_blank" rel="noreferrer">
+          <a className="btn btn-primary" href={SQL_EDITOR_URL} target="_blank" rel="noreferrer">
             Open SQL Editor <IconOut size={14} />
           </a>
           <button type="button" className="btn btn-ghost" onClick={() => void refresh()}>
             Try again
           </button>
         </div>
-        <details className="sql-details">
-          <summary>Show the SQL</summary>
-          <pre className="sql">{schemaSql}</pre>
-        </details>
       </div>
     </div>
   )

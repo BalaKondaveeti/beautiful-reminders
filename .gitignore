@@ -2,7 +2,8 @@ node_modules
 dist
 *.local
 .DS_Store
-# Personal seed data: never commit (the repo is public)
-supabase/seed.sql
+# SQL is run by hand in Supabase, never committed
+*.sql
+supabase/
 # Local test output
 shots
