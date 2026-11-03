@@ -376,7 +376,7 @@ select.field {
 
 .segmented { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: var(--hair-gap); padding: var(--hair-gap); border-radius: var(--radius); background: var(--fill); }
 .segmented button { min-height: var(--tap); border: 0; border-radius: calc(var(--radius) - var(--hair-gap)); background: transparent; color: var(--ink-2); font-size: var(--text-sub); font-weight: var(--w-semibold); }
-.segmented button.is-on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-seg); }
+.segmented button.is-on { background: var(--segment-on); color: var(--ink); box-shadow: var(--shadow-seg); }
 
 .kind-pills { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .kind-pill {
@@ -537,3 +537,5 @@ select.field {
 .signin { display: flex; flex-direction: column; justify-content: center; padding-top: calc(var(--safe-top) + var(--space-9)); }
 .signin-mark { width: var(--icon-tile-lg); height: var(--icon-tile-lg); margin-bottom: var(--space-5); border-radius: var(--radius); }
 .signin-sub { margin-top: var(--space-2); color: var(--ink-2); }
+
+.section + .btn-block { margin-top: var(--space-7); }

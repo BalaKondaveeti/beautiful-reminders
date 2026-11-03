@@ -6,6 +6,7 @@ import { DASHBOARD_URL, SQL_EDITOR_URL, SUPABASE_URL, supabase } from '../supaba
 import type { Goal } from '../types'
 import { IconBack, IconOut, IconRestore, IconTrash } from '../components/icons'
 import { Badge, ConfirmSheet, TopBar } from '../components/ui'
+import { getAppearance, setAppearance, type Appearance } from '../appearance'
 
 /* ---------- Archived ---------- */
 
@@ -82,6 +83,7 @@ export function Settings() {
   const pending = useStore((s) => s.pending)
   const lastLoaded = useStore((s) => s.lastLoaded)
   const [confirm, setConfirm] = useState(false)
+  const [appearance, setLocalAppearance] = useState<Appearance>(getAppearance)
 
   const signOut = async () => {
     flush()
@@ -120,6 +122,33 @@ export function Settings() {
               Refresh
             </button>
           </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <h2 className="section-title">Appearance</h2>
+        <div className="segmented" role="radiogroup" aria-label="Appearance">
+          {(
+            [
+              ['light', 'Light'],
+              ['dark', 'Dark'],
+              ['system', 'Match iPhone'],
+            ] as [Appearance, string][]
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              role="radio"
+              aria-checked={appearance === value}
+              className={appearance === value ? 'is-on' : ''}
+              onClick={() => {
+                setAppearance(value)
+                setLocalAppearance(value)
+              }}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </section>
 
