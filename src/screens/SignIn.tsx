@@ -19,20 +19,9 @@ export function SignIn() {
 
   return (
     <div className="page signin">
-      <div className="signin-mark" aria-hidden="true">
-        <svg viewBox="0 0 64 64" width="64" height="64">
-          <defs>
-            <linearGradient id="sgr" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" className="ring-stop-a k-deadline" />
-              <stop offset="100%" className="ring-stop-b k-deadline" />
-            </linearGradient>
-          </defs>
-          <circle cx="32" cy="32" r="24" fill="none" className="signin-track" strokeWidth="6" />
-          <circle cx="32" cy="32" r="24" fill="none" stroke="url(#sgr)" strokeWidth="6" strokeLinecap="round" strokeDasharray="150.8" strokeDashoffset="38" transform="rotate(-90 32 32)" />
-        </svg>
-      </div>
+      <img className="signin-mark" src="./icon.svg" alt="" />
       <h1 className="home-title signin-title">Beautiful Reminders</h1>
-      <p className="signin-sub">Your goals, deadlines and daily habits, in one calm place.</p>
+      <p className="signin-sub">Your goals, deadlines and daily habits in one list.</p>
       <form
         className="form"
         onSubmit={(e) => {

@@ -5,8 +5,8 @@ import { dates, displayTitle, kids, type Index } from '../data'
 import { go, goalPath } from '../router'
 import { createGoal, setStatus, toggleCheckin } from '../store'
 import type { Goal, Kind } from '../types'
-import { IconChevron, IconFlame, IconPlus } from './icons'
-import { Badge, Bar, CheckButton, Ring, TickBox, kc } from './ui'
+import { IconChevron, IconPlus } from './icons'
+import { Badge, Bar, CheckButton, TickBox, kc } from './ui'
 
 const open = (g: Goal) => () => go(goalPath(g.id))
 
@@ -34,15 +34,15 @@ export function summaryText(ix: Index, g: Goal): string {
       return countdown(g).label
     case 'habit': {
       const s = habitStats(g, dates(ix, g.id))
-      return `${s.doneToday ? 'Done today' : 'Not yet today'} · ${s.streak}-day streak`
+      return `${s.doneToday ? 'Done today' : 'Not done today'}, ${streakText(s.streak).toLowerCase()}`
     }
     case 'collection': {
       const c = collectionCounts(children)
-      return `${c.active} doing · ${c.want} want · ${c.done} done`
+      return `${c.active} doing, ${c.want} want to, ${c.done} done`
     }
     default: {
       const p = stepProgress(children)
-      return p.total ? `${p.done} of ${p.total} steps` : g.status === 'want' ? 'Not started' : 'In progress'
+      return p.total ? `${p.done} of ${p.total} ${p.total === 1 ? 'step' : 'steps'} done` : g.status === 'want' ? 'Not started' : 'In progress'
     }
   }
 }
@@ -79,37 +79,33 @@ export function DaysLeft({ goal, hero }: { goal: Goal; hero?: boolean }) {
 /* ---------- Deadline card ---------- */
 
 export function DeadlineCard({ ix, goal }: { ix: Index; goal: Goal }) {
-  const children = kids(ix, goal.id)
-  const p = stepProgress(children)
+  const p = stepProgress(kids(ix, goal.id))
   const used = timeUsed(goal)
   const cd = countdown(goal)
   return (
-    <article className={`card card-deadline ${kc('deadline')} ${goal.status === 'done' ? 'is-done' : ''}`} {...cardKeys(goal)}>
-      <div className="card-accent" />
+    <article className={`card card-deadline ${goal.status === 'done' ? 'is-done' : ''}`} {...cardKeys(goal)}>
       <div className="card-head">
         <Badge goal={goal} />
         <h3 className="card-title">{displayTitle(goal)}</h3>
       </div>
       <div className="deadline-mid">
-        <div>
-          <DaysLeft goal={goal} />
-          <div className="card-meta">
-            {cd.state === 'done' ? cd.label : goal.due_date ? `Due ${fmtDate(goal.due_date)}` : ''}
-            {cd.weeks && <span className="muted"> · {cd.weeks}</span>}
-          </div>
-        </div>
-        {p.total > 0 && (
-          <Ring value={p.done / p.total} kind="deadline" size={56} stroke={5}>
-            <span className="ring-num">
-              {p.done}/{p.total}
+        <DaysLeft goal={goal} />
+        <div className="deadline-side">
+          {cd.state === 'done' ? <span>{cd.label}</span> : goal.due_date && <span>Due {fmtDate(goal.due_date)}</span>}
+          {p.total > 0 && (
+            <span>
+              {p.done} of {p.total} {p.total === 1 ? 'step' : 'steps'} done
             </span>
-          </Ring>
-        )}
+          )}
+        </div>
       </div>
       {used !== null && goal.status !== 'done' && (
         <div className="time-used">
+          <div className="time-used-row">
+            <span>Time used</span>
+            <span>{Math.round(used * 100)}%</span>
+          </div>
           <Bar value={used} kind="deadline" thin label="Time used" />
-          <span className="time-used-label">{Math.round(used * 100)}% of time used</span>
         </div>
       )}
     </article>
@@ -143,7 +139,7 @@ export function HabitCard({ ix, goal }: { ix: Index; goal: Goal }) {
         <div className="card-head-text">
           <h3 className="card-title">{displayTitle(goal)}</h3>
           <div className="card-meta">
-            <Streak n={s.streak} /> · best {s.best} · {Math.round(s.rate * 100)}%
+            {streakText(s.streak)}, done on {Math.round(s.rate * 100)}% of days
           </div>
         </div>
         <CheckButton checked={s.doneToday} onToggle={(v) => toggleCheckin(goal.id, todayISO(), v)} label={`Done today: ${goal.title}`} />
@@ -153,13 +149,12 @@ export function HabitCard({ ix, goal }: { ix: Index; goal: Goal }) {
   )
 }
 
+export function streakText(n: number): string {
+  return n === 0 ? 'No streak yet' : `${n}-day streak`
+}
+
 export function Streak({ n }: { n: number }) {
-  return (
-    <span className={`streak ${n > 0 ? 'is-on' : ''}`}>
-      <IconFlame size={14} />
-      {n} {n === 1 ? 'day' : 'days'}
-    </span>
-  )
+  return <span className="streak">{streakText(n)}</span>
 }
 
 /* ---------- Habit row (Today list and inside goals) ---------- */
@@ -203,8 +198,8 @@ export function StepRow({ ix, goal, kind = 'task' }: { ix: Index; goal: Goal; ki
         {hasMore && (
           <span className="row-sub">
             {p.total > 0 && `${p.done} of ${p.total}`}
-            {p.total > 0 && goal.notes && ' · '}
-            {goal.notes && 'Notes'}
+            {p.total > 0 && <span>steps</span>}
+            {goal.notes && <span>Has notes</span>}
           </span>
         )}
       </button>
@@ -220,7 +215,7 @@ export function MiniCard({ ix, goal, right }: { ix: Index; goal: Goal; right?: R
   const cd = goal.kind === 'deadline' ? countdown(goal) : null
   return (
     <article className={`card card-mini ${kc(goal.kind)} ${goal.status === 'done' ? 'is-done' : ''}`} {...cardKeys(goal)}>
-      <Badge goal={goal} size="sm" />
+      <Badge goal={goal} />
       <div className="card-head-text">
         <h4 className="mini-title">{displayTitle(goal)}</h4>
         <div className={`card-meta ${cd?.state === 'overdue' ? 'is-overdue' : ''}`}>{summary}</div>
@@ -250,17 +245,9 @@ export function CollectionCard({ ix, goal }: { ix: Index; goal: Goal }) {
         <Badge goal={goal} />
         <h3 className="card-title">{displayTitle(goal)}</h3>
       </div>
-      <div className="counts">
-        <span className="count">
-          <b>{c.active}</b> Doing
-        </span>
-        <span className="count">
-          <b>{c.want}</b> Want
-        </span>
-        <span className="count">
-          <b>{c.done}</b> Done
-        </span>
-      </div>
+      <p className="card-meta">
+        {c.active} doing, {c.want} want to, {c.done} done
+      </p>
       {chips.length > 0 && (
         <div className="chips">
           {chips.map((x) => (
@@ -282,7 +269,7 @@ export function PassiveCard({ ix, goal }: { ix: Index; goal: Goal }) {
   const p = stepProgress(kids(ix, goal.id))
   return (
     <article className={`card card-passive ${kc(goal.kind)} ${goal.status === 'done' ? 'is-done' : ''}`} {...cardKeys(goal)}>
-      <Badge goal={goal} size="sm" />
+      <Badge goal={goal} />
       <div className="card-head-text">
         <h4 className="mini-title">{displayTitle(goal)}</h4>
         <div className="card-meta">{summaryText(ix, goal)}</div>

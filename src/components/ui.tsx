@@ -96,16 +96,9 @@ export function Ring({
   const r = (size - stroke) / 2
   const c = 2 * Math.PI * r
   const v = Math.max(0, Math.min(1, value))
-  const gid = `rg-${kind}`
   return (
     <div className={`ring ${kc(kind)}`} style={{ width: size, height: size }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true">
-        <defs>
-          <linearGradient id={gid} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" className="ring-stop-a" />
-            <stop offset="100%" className="ring-stop-b" />
-          </linearGradient>
-        </defs>
         <circle className="ring-track" cx={size / 2} cy={size / 2} r={r} strokeWidth={stroke} fill="none" />
         <circle
           className="ring-fill"
@@ -114,7 +107,6 @@ export function Ring({
           r={r}
           strokeWidth={stroke}
           fill="none"
-          stroke={`url(#${gid})`}
           strokeLinecap="round"
           strokeDasharray={c}
           strokeDashoffset={c * (1 - v)}

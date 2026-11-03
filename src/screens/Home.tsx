@@ -66,11 +66,11 @@ export function Home() {
       {view.todayHabits.length > 0 && (
         <section className="section">
           <div className="section-head">
-            <h2 className="section-title">Today</h2>
+            <h2 className="section-title">Today's habits</h2>
             <div className="today-summary">
-              <Ring value={view.done / view.todayHabits.length} kind="habit" size={28} stroke={3.5} />
+              <Ring value={view.done / view.todayHabits.length} kind="habit" size={22} stroke={3} />
               <span>
-                {view.done} of {view.todayHabits.length} done today
+                {view.done} of {view.todayHabits.length} done
               </span>
             </div>
           </div>
@@ -117,7 +117,7 @@ export function Home() {
 
       {view.passive.length > 0 && (
         <section className="section">
-          <h2 className="section-title">Someday, calmly</h2>
+          <h2 className="section-title">Long-term goals</h2>
           <div className="grid-2">
             {view.passive.map((g) => (
               <PassiveCard key={g.id} ix={ix} goal={g} />
@@ -140,7 +140,7 @@ export function Home() {
       {hasData && view.empty && (
         <div className="empty">
           <h2 className="empty-title">Nothing here yet</h2>
-          <p>Add your first goal: a deadline, a daily habit, or something to do someday.</p>
+          <p>Add a goal with a deadline, a daily habit, or something long-term.</p>
           <button type="button" className="btn btn-primary" onClick={() => go('/new')}>
             Add a goal
           </button>

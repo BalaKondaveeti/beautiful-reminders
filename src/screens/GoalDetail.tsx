@@ -219,16 +219,16 @@ function DeadlineBody({ ix, goal }: { ix: Index; goal: Goal }) {
       <section className={`hero ${kc('deadline')} ${cd.state === 'overdue' ? 'is-overdue' : ''}`}>
         <DaysLeft goal={goal} hero />
         <p className="hero-meta">
-          {cd.state === 'done' ? cd.label : goal.due_date ? fmtDate(goal.due_date, { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' }) : 'No due date yet: tap the pencil to add one'}
-          {cd.weeks && <span className="hero-weeks"> · {cd.weeks}</span>}
+          {cd.state === 'done' ? cd.label : goal.due_date ? `Due ${fmtDate(goal.due_date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}` : 'No due date yet. Tap the pencil to add one.'}
+          {cd.weeks && <span className="hero-weeks">{cd.weeks}</span>}
         </p>
         {used !== null && cd.state !== 'done' && (
           <div className="hero-bar">
-            <Bar value={used} kind="deadline" label="Time used" />
             <div className="hero-bar-labels">
-              <span>Started {fmtDate(goal.start_date, { month: 'short', day: 'numeric' })}</span>
-              <span>{Math.round(used * 100)}% of time used</span>
+              <span>Time used since {fmtDate(goal.start_date, { month: 'short', day: 'numeric' })}</span>
+              <span>{Math.round(used * 100)}%</span>
             </div>
+            <Bar value={used} kind="deadline" label="Time used" />
           </div>
         )}
       </section>
@@ -255,24 +255,24 @@ function HabitBody({ ix, goal }: { ix: Index; goal: Goal }) {
           <CheckButton size="lg" checked={s.doneToday} onToggle={(v) => toggleCheckin(goal.id, today, v)} label="Done today" />
           <div>
             <div className="habit-toggle-title">{s.doneToday ? 'Done today' : 'Not done yet today'}</div>
-            <div className="habit-toggle-sub">{s.doneToday ? 'Nice. See you tomorrow.' : 'Tap the circle when you have'}</div>
+            <div className="habit-toggle-sub">{s.doneToday ? 'Tap the circle to undo' : 'Tap the circle once you have done it'}</div>
           </div>
         </div>
         <div className="stats">
           <div className="stat">
             <span className="stat-num">{s.streak}</span>
-            <span className="stat-label">Streak</span>
+            <span className="stat-label">Current streak</span>
           </div>
           <div className="stat">
             <span className="stat-num">{s.best}</span>
-            <span className="stat-label">Best</span>
+            <span className="stat-label">Best streak</span>
           </div>
           <div className="stat">
             <span className="stat-num">
               {Math.round(s.rate * 100)}
               <small>%</small>
             </span>
-            <span className="stat-label">Since {fmtDate(goal.start_date, { month: 'short', day: 'numeric' })}</span>
+            <span className="stat-label">Days done since {fmtDate(goal.start_date, { month: 'short', day: 'numeric' })}</span>
           </div>
         </div>
         {finished && <p className="hero-meta">This habit is marked finished. It won't show in Today.</p>}
@@ -329,7 +329,7 @@ function Calendar({
         </button>
         <div className="cal-title">
           {first.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
-          <span className="cal-count">{count} days</span>
+          <span className="cal-count">Done on {count} {count === 1 ? 'day' : 'days'}</span>
         </div>
         <button type="button" className="icon-btn" aria-label="Next month" disabled={isCurrent} onClick={() => shift(1)}>
           <IconChevron size={18} />
@@ -374,11 +374,11 @@ function DayNote({ ix, goal, date }: { ix: Index; goal: Goal; date: string }) {
     setValue(checkin?.note ?? '')
     // reset only when the day or check-in changes, not on every keystroke
   }, [date, checkin?.id])
-  const label = date === todayISO() ? 'Today' : localDate(date).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })
+  const label = date === todayISO() ? 'today' : localDate(date).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })
   return (
     <section className="section day-note">
       <label className="section-title" htmlFor="day-note">
-        Note · {label}
+        Note for {label}
       </label>
       {checkin ? (
         <input
@@ -410,7 +410,7 @@ function PassiveBody({ ix, goal }: { ix: Index; goal: Goal }) {
           <p className="calm-line">{countdown(goal).label}</p>
         ) : (
           <>
-            <p className="calm-line">No date. No pressure. One step at a time.</p>
+            <p className="calm-line">No due date. Tick off steps whenever you get to them.</p>
             {p.total > 0 && (
               <div className="calm-progress">
                 <Bar value={p.done / p.total} kind="passive" thin label="Steps done" />

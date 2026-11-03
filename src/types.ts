@@ -30,9 +30,9 @@ export interface Checkin {
 export const KINDS: Kind[] = ['deadline', 'habit', 'passive', 'collection', 'task']
 
 export const KIND_INFO: Record<Kind, { label: string; blurb: string }> = {
-  deadline: { label: 'Deadline', blurb: 'A goal with a target date and a countdown' },
-  habit: { label: 'Habit', blurb: 'Something you do every day, with a streak' },
-  passive: { label: 'Passive', blurb: 'Long-running, no date, no pressure' },
-  collection: { label: 'Collection', blurb: 'A container of goals, each tracked on its own' },
-  task: { label: 'Task', blurb: 'A simple step you tick off' },
+  deadline: { label: 'Deadline', blurb: 'Has a due date. Shows how many days are left.' },
+  habit: { label: 'Habit', blurb: 'Something you do every day. Tracks your streak.' },
+  passive: { label: 'Long-term', blurb: 'No due date. A list of steps you work through over time.' },
+  collection: { label: 'Collection', blurb: 'A group of goals, like skills to learn. Each one is tracked on its own.' },
+  task: { label: 'Task', blurb: 'A single thing to do. Tick it off when it’s done.' },
 }

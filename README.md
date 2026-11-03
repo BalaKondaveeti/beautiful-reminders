@@ -10,7 +10,7 @@ Live: https://balakondaveeti.github.io/beautiful-reminders/
 |---|---|
 | Deadline | Days left, time used, sub-goal progress |
 | Habit | Done today, streak, best streak, completion rate, month calendar |
-| Passive | A calm checklist of steps, no date |
+| Long-term | A checklist of steps, no due date |
 | Collection | Items grouped as Doing / Want to / Done, each with its own tracker |
 | Task | A tick, plus optional steps |
 
@@ -32,4 +32,4 @@ Supabase tables are prefixed `br_`, with row-level security limiting every row t
 
 ## Design
 
-All colors, fonts, sizes, spacing and radii are CSS variables in `src/theme.css`, with a separate dark palette.
+Native-feeling and plain: the system font, neutral greys, one blue for anything you can tap, green for done, red for overdue. All colors, sizes, spacing and radii are CSS variables in `src/theme.css`, with a separate dark palette.
